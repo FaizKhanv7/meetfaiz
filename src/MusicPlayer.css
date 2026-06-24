@@ -1,0 +1,272 @@
+/* ================================================================
+   MUSIC PLAYER — Old Facebook sidebar widget style
+   ================================================================ */
+
+.mp-box {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---- Header ---- */
+.mp-header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 2px;
+}
+
+.mp-note {
+  color: #3b5998;
+  font-size: 13px;
+}
+
+.mp-header-title {
+  font-weight: bold;
+  font-size: 12px;
+  color: #3b5998;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ---- Track info ---- */
+.mp-track-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0 4px;
+}
+
+.mp-disc {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #6d84b4, #2c4177);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 2px solid #3b5998;
+  position: relative;
+}
+
+.mp-disc::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #e8e8e8;
+  border: 1px solid #bbb;
+}
+
+.mp-disc-inner {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  z-index: 1;
+  position: relative;
+}
+
+.mp-disc-spin {
+  animation: discSpin 3s linear infinite;
+}
+
+@keyframes discSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.mp-meta {
+  flex: 1;
+  overflow: hidden;
+}
+
+.mp-song-title {
+  font-weight: bold;
+  font-size: 12px;
+  color: #3b5998;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mp-song-artist {
+  font-size: 11px;
+  color: #777;
+  margin-top: 1px;
+}
+
+/* ---- Progress / Seek ---- */
+.mp-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  /* Prevent seek bar from punching outside the box */
+  min-width: 0;
+  overflow: hidden;
+}
+
+.mp-time {
+  font-size: 10px;
+  color: #888;
+  font-family: 'Courier New', monospace;
+  min-width: 26px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.mp-seek {
+  /* flex: 1 with min-width: 0 keeps it from overflowing */
+  flex: 1;
+  min-width: 0;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 2px;
+  cursor: pointer;
+  outline: none;
+  display: block;
+  background: linear-gradient(
+    to right,
+    #6d84b4 0%,
+    #6d84b4 var(--progress, 0%),
+    #d0d0d0 var(--progress, 0%),
+    #d0d0d0 100%
+  );
+}
+
+.mp-seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3b5998;
+  border: 1px solid #2c4177;
+  cursor: pointer;
+  box-shadow: 0 0 2px rgba(0,0,0,0.3);
+}
+
+.mp-seek::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #3b5998;
+  border: 1px solid #2c4177;
+  cursor: pointer;
+}
+
+/* ---- Controls ---- */
+.mp-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mp-btn {
+  background: #5b79b7;
+  color: #fff;
+  border: 1px solid #3b5998;
+  font-family: 'Lucida Grande', Arial, sans-serif;
+  cursor: pointer;
+  border-radius: 2px;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.mp-btn:hover {
+  background: #3b5998;
+}
+
+.mp-btn-play {
+  font-size: 16px;
+  padding: 5px 14px;
+  min-width: 44px;
+}
+
+.mp-btn-skip {
+  font-size: 9px;
+  padding: 5px 8px;
+  color: #dde7f7;
+}
+
+/* ---- Track list ---- */
+.mp-tracklist {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2px;
+  border-top: 1px solid #e5e5e5;
+  padding-top: 6px;
+}
+
+.mp-track-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 3px 4px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Lucida Grande', Arial, sans-serif;
+  transition: background 0.1s;
+}
+
+.mp-track-item:hover {
+  background: #f0f4ff;
+}
+
+.mp-track-item--active {
+  background: #dde7f7;
+}
+
+.mp-track-num {
+  font-size: 10px;
+  color: #aaa;
+  min-width: 12px;
+}
+
+.mp-track-name {
+  font-size: 11px;
+  color: #444;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mp-track-item--active .mp-track-name {
+  color: #3b5998;
+  font-weight: bold;
+}
+
+/* Animated equalizer bars — vertical up/down pulses */
+.mp-eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 1px;
+  height: 10px;
+  flex-shrink: 0;
+}
+
+.mp-eq-bar {
+  width: 2px;
+  background: #6d84b4;
+  border-radius: 1px;
+  transform-origin: bottom;
+}
+
+.mp-eq-bar:nth-child(1) { animation: eqBar 0.7s ease-in-out infinite alternate; }
+.mp-eq-bar:nth-child(2) { animation: eqBar 0.5s ease-in-out 0.15s infinite alternate; }
+.mp-eq-bar:nth-child(3) { animation: eqBar 0.9s ease-in-out 0.05s infinite alternate; }
+.mp-eq-bar:nth-child(4) { animation: eqBar 0.6s ease-in-out 0.25s infinite alternate; }
+
+@keyframes eqBar {
+  0%   { height: 2px;  opacity: 0.5; }
+  50%  { height: 8px;  opacity: 1;   }
+  100% { height: 4px;  opacity: 0.8; }
+}

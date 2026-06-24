@@ -1,0 +1,365 @@
+/* ================================================================
+   TRANSITION SCREEN — AI-agent build sequence
+   ================================================================ */
+
+/* ---- CSS custom props for shimmer & swap (scoped here) ---- */
+.ts-root {
+  --shimmer-dur:        1800ms;
+  --shimmer-ease:       linear;
+  --text-swap-dur:      150ms;
+  --text-swap-ease:     ease-out;
+  --text-swap-y:        6px;
+  --text-swap-blur:     3px;
+
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  transition: opacity 0.5s ease;
+}
+
+.ts-root.ts-fadeout {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---- Direction-specific backgrounds ---- */
+
+/* AI-agent panel (shown when going modern → retro) — warm light */
+.ts-modern {
+  background: #f5f2ee;
+  --shimmer-base:       #9b9b9b;
+  --shimmer-highlight:  #1a1a1a;
+  --bar-color:          #1a1a1a;
+  --bar-glow:           rgba(0, 0, 0, 0.12);
+  --check-color:        #1a1a1a;
+  --done-color:         #1a1a1a;
+  --log-color:          #bbb;
+  --header-color:       #bbb;
+  --panel-bg:           rgba(255, 255, 255, 0.92);
+  --panel-border:       rgba(0, 0, 0, 0.08);
+  --counter-color:      #ccc;
+  --grid-color:         rgba(0, 0, 0, 0.03);
+}
+
+/* Retro log panel (shown when going retro → modern) — warm light too */
+.ts-classic {
+  background: #f5f2ee;
+  --shimmer-base:       #9b9b9b;
+  --shimmer-highlight:  #1a1a1a;
+  --bar-color:          #1a1a1a;
+  --bar-glow:           rgba(0, 0, 0, 0.12);
+  --check-color:        #1a1a1a;
+  --done-color:         #1a1a1a;
+  --log-color:          #bbb;
+  --header-color:       #bbb;
+  --panel-bg:           rgba(255, 255, 255, 0.92);
+  --panel-border:       rgba(0, 0, 0, 0.08);
+  --counter-color:      #ccc;
+  --grid-color:         rgba(0, 0, 0, 0.03);
+}
+
+/* ---- Subtle grid background ---- */
+.ts-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+}
+
+/* ================================================================
+   PANEL
+   ================================================================ */
+.ts-panel {
+  position: relative;
+  z-index: 2;
+  width: min(480px, 90vw);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 16px;
+  padding: 28px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.ts-modern .ts-panel,
+.ts-classic .ts-panel {
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* ---- Header row ---- */
+.ts-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ts-header-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bar-color);
+  animation: dotPulse 1.4s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
+
+.ts-header-label {
+  font-size: 11px;
+  font-family: 'Courier New', monospace;
+  color: var(--header-color);
+  letter-spacing: 0.08em;
+}
+
+/* ================================================================
+   SHIMMER TEXT  (active task)
+   ================================================================ */
+.ts-status-wrap {
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+}
+
+.ts-shimmer {
+  position: relative;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--shimmer-base);
+}
+
+.ts-shimmer::before {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+    90deg,
+    transparent          0%,
+    transparent         38%,
+    var(--shimmer-highlight) 50%,
+    transparent         62%,
+    transparent        100%
+  );
+  background-size: 400% 100%;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerSweep var(--shimmer-dur) var(--shimmer-ease) infinite;
+}
+
+@keyframes shimmerSweep {
+  0%   { background-position: 120% 0; }
+  100% { background-position: -20% 0; }
+}
+
+/* "Ready." / "Restored." end state */
+.ts-done-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--done-color);
+  letter-spacing: -0.01em;
+  animation: fadeUp 0.4s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+/* ================================================================
+   COMPLETED TASK LOG  (swap animation)
+   ================================================================ */
+.ts-log {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 120px;
+  /* Newest at the bottom */
+  justify-content: flex-end;
+  overflow: hidden;
+}
+
+/* Each completed line */
+.ts-swap-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--log-color);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.02em;
+  /* Default state: visible at 0 */
+  transform: translateY(0);
+  filter: blur(0px);
+  opacity: 1;
+  transition:
+    transform  var(--text-swap-dur) var(--text-swap-ease),
+    filter     var(--text-swap-dur) var(--text-swap-ease),
+    opacity    var(--text-swap-dur) var(--text-swap-ease);
+  will-change: transform, filter, opacity;
+}
+
+/* Enter-start: positioned below, blurred, invisible — no transition */
+.ts-swap-line.ts-swap-enter-start {
+  transform: translateY(var(--text-swap-y));
+  filter: blur(var(--text-swap-blur));
+  opacity: 0;
+  transition: none;
+}
+
+.ts-check {
+  color: var(--check-color);
+  font-size: 10px;
+  flex-shrink: 0;
+  font-style: normal;
+}
+
+/* ================================================================
+   PROGRESS BAR
+   ================================================================ */
+.ts-bar-track {
+  height: 2px;
+  background: rgba(128, 128, 128, 0.12);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.ts-bar-fill {
+  height: 100%;
+  background: var(--bar-color);
+  border-radius: 1px;
+  transition: width 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 8px var(--bar-glow);
+}
+
+/* ---- Step counter ---- */
+.ts-counter {
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  color: var(--counter-color);
+  letter-spacing: 0.1em;
+  text-align: right;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ts-shimmer::before { animation: none !important; }
+  .ts-swap-line,
+  .ts-swap-line.ts-swap-enter-start { transition: none !important; }
+}
+
+/* ================================================================
+   REVERT SCREEN — original retro log style (restored)
+   ================================================================ */
+
+/* Background blocks */
+.ts-blocks {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.ts-block {
+  position: absolute;
+  border-radius: 2px;
+  animation: blockFade 1.8s ease-in-out infinite alternate;
+}
+
+.ts-classic .ts-block {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+@keyframes blockFade {
+  0%   { opacity: 0; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Inner panel */
+.ts-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px;
+  max-width: 540px;
+  width: 90%;
+  font-family: 'Courier New', monospace;
+}
+
+.ts-classic .ts-inner {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+.ts-icon {
+  font-size: 36px;
+  animation: spin 2s linear infinite;
+  color: #1a1a1a;
+}
+
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ts-title {
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  text-align: center;
+  color: #1a1a1a;
+  font-family: 'Courier New', monospace;
+}
+
+/* Old-style log lines */
+.ts-old-log {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 140px;
+  font-family: 'Courier New', monospace;
+}
+
+.ts-log-line {
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  font-family: 'Courier New', monospace;
+}
+
+.ts-classic .ts-log-line--done   { color: #bbb; }
+.ts-classic .ts-log-line--active { color: #1a1a1a; font-weight: bold; }
+
+.ts-complete {
+  font-size: 14px;
+  font-weight: bold;
+  animation: pulse 0.6s ease;
+  color: #1a1a1a;
+  font-family: 'Courier New', monospace;
+}
+
+@keyframes pulse {
+  0%   { opacity: 0; transform: scale(0.9); }
+  100% { opacity: 1; transform: scale(1); }
+}

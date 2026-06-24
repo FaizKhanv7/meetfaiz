@@ -1,0 +1,379 @@
+/* ================================================================
+   MODERN SPOTIFY-STYLE PLAYER — bottom-right corner box
+   ================================================================ */
+
+.msp-root {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 280px;
+  z-index: 200;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(0,0,0,0.1);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0,0,0,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+/* ================================================================
+   HEADER — always visible
+   ================================================================ */
+.msp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 12px 10px;
+  gap: 8px;
+  cursor: default;
+}
+
+.msp-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+
+.msp-header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* Mini vinyl in header */
+.msp-mini-art {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #1e1b4b, #312e81);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(99,102,241,0.4);
+  overflow: hidden;
+}
+
+.msp-mini-vinyl {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: repeating-radial-gradient(
+    circle at 50%,
+    #1e1040 0px,
+    #1e1040 2px,
+    #2d2060 3px,
+    #1e1040 4px
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.msp-vinyl-spin {
+  animation: vinylSpin 4s linear infinite;
+}
+
+@keyframes vinylSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.msp-vinyl-hole {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #06060f;
+  border: 1px solid rgba(255,255,255,0.12);
+  position: absolute;
+  pointer-events: none;
+}
+
+.msp-header-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.msp-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a1a1a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.msp-artist {
+  font-size: 11px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ================================================================
+   BODY — collapses away
+   ================================================================ */
+.msp-body {
+  padding: 0 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* Smooth height collapse */
+  max-height: 300px;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.25s ease,
+              padding 0.3s ease;
+  opacity: 1;
+}
+
+.msp-root--collapsed .msp-body {
+  max-height: 0;
+  opacity: 0;
+  padding-bottom: 0;
+}
+
+/* ================================================================
+   BUTTONS
+   ================================================================ */
+.msp-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  border-radius: 50%;
+  transition: color 0.15s, background 0.15s, transform 0.15s;
+}
+
+.msp-btn:hover {
+  color: #1a1a1a;
+  background: rgba(0,0,0,0.05);
+}
+
+.msp-btn-play-sm {
+  color: #6c47ff;
+  padding: 4px;
+}
+
+.msp-btn-play-sm:hover {
+  color: #4f2fe8;
+  background: rgba(108,71,255,0.08);
+}
+
+.msp-collapse-btn {
+  color: #bbb;
+  padding: 4px;
+}
+
+.msp-collapse-btn:hover {
+  color: #888;
+  background: rgba(0,0,0,0.04);
+}
+
+.msp-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.msp-btn-play {
+  width: 38px;
+  height: 38px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff !important;
+  border-radius: 50%;
+  box-shadow: 0 0 14px rgba(99,102,241,0.4);
+}
+
+.msp-btn-play:hover {
+  background: linear-gradient(135deg, #818cf8, #a78bfa) !important;
+  transform: scale(1.06);
+}
+
+.msp-btn-skip {
+  color: #aaa;
+}
+
+/* ================================================================
+   SEEK BAR
+   ================================================================ */
+.msp-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.msp-time {
+  font-size: 10px;
+  color: #aaa;
+  font-family: 'Courier New', monospace;
+  flex-shrink: 0;
+  min-width: 28px;
+}
+
+.msp-track-bg {
+  flex: 1;
+  height: 3px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 2px;
+  position: relative;
+}
+
+.msp-track-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6c47ff, #00b4a0);
+  border-radius: 2px;
+  pointer-events: none;
+  transition: width 0.1s linear;
+}
+
+.msp-seek {
+  position: absolute;
+  inset: -8px 0;
+  width: 100%;
+  height: 20px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  outline: none;
+  margin: 0;
+}
+
+.msp-seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+  box-shadow: 0 0 4px rgba(99,102,241,0.6);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.msp-progress-wrap:hover .msp-seek::-webkit-slider-thumb {
+  opacity: 1;
+}
+
+.msp-seek::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  border: none;
+}
+
+/* ================================================================
+   EQ BARS
+   ================================================================ */
+.msp-eq {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 3px;
+  height: 14px;
+}
+
+.msp-eq-bar {
+  width: 3px;
+  border-radius: 2px;
+  background: linear-gradient(to top, #6c47ff, #00b4a0);
+}
+
+.msp-eq-bar:nth-child(1) { animation: mspEq 0.7s ease-in-out infinite alternate; }
+.msp-eq-bar:nth-child(2) { animation: mspEq 0.5s ease-in-out 0.1s infinite alternate; }
+.msp-eq-bar:nth-child(3) { animation: mspEq 0.9s ease-in-out 0.05s infinite alternate; }
+.msp-eq-bar:nth-child(4) { animation: mspEq 0.6s ease-in-out 0.2s infinite alternate; }
+.msp-eq-bar:nth-child(5) { animation: mspEq 0.8s ease-in-out 0.15s infinite alternate; }
+
+@keyframes mspEq {
+  0%   { height: 2px;  opacity: 0.4; }
+  50%  { height: 12px; opacity: 1;   }
+  100% { height: 5px;  opacity: 0.7; }
+}
+
+/* ================================================================
+   TRACK LIST
+   ================================================================ */
+.msp-tracklist {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding-top: 8px;
+}
+
+.msp-track-item {
+  display: grid;
+  grid-template-columns: 16px 1fr auto;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 5px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.msp-track-item:hover {
+  background: rgba(0,0,0,0.04);
+}
+
+.msp-track-item--active {
+  background: rgba(108,71,255,0.07);
+}
+
+.msp-track-num {
+  font-size: 10px;
+  color: #bbb;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+}
+
+.msp-track-item--active .msp-track-num {
+  color: #6c47ff;
+}
+
+.msp-track-name {
+  font-size: 12px;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.msp-track-item--active .msp-track-name {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.msp-track-artist {
+  font-size: 10px;
+  color: #bbb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70px;
+}
