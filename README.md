@@ -1,9 +1,9 @@
-# Faiz Khan Website
+# My Personal Website
 
 Welcome to my personal site! I've been wanting to make something like this for a while, and I finally did :) 
 Checkout the projects I'm working on, stats about me, and music I'm listening to right now.
 
-## What this site includes
+## What's in it?
 
 - A vintage facbook style landing page
 - A transform feature that changes the site into a modern version
