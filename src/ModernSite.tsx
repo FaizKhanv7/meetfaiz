@@ -17,10 +17,10 @@ const PROJECTS = [
   },
   {
     id: 2,
-    title: 'Hustlr',
-    description: "The startup idea I'm currently building. If you wanna make money, check it out!",
+    title: 'Muse',
+    description: "The startup idea I'm currently building. If you vibecode, check it out!",
     tags: ['React', 'TypeScript', 'Startup'],
-    link: 'https://tryhustlr.vercel.app',
+    link: 'https://usemuse.dev',
     icon: '🚀',
   },
   {
@@ -203,7 +203,13 @@ function TiltCard() {
               </svg>
               LinkedIn
             </a>
-            <a href="mailto:writetofaiz7@gmail.com" className="ms-cc-link">
+            <a href="https://x.com/faizkhanv7" target="_blank" rel="noreferrer" className="ms-cc-link">
+              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+              </svg>
+              X
+            </a>
+            <a href="mailto:faiz@usemuse.dev" className="ms-cc-link">
               <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
                 <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
               </svg>
@@ -331,6 +337,66 @@ function ProjectCarousel() {
         ))}
       </div>
     </div>
+  )
+}
+
+const CONTACT_EMAIL = 'faiz@usemuse.dev'
+
+// ── Contact form (opens the visitor's mail client, pre-addressed) ────────────
+function ContactForm() {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
+
+  return (
+    <form
+      className="ms-form ms-glass"
+      onSubmit={e => {
+        e.preventDefault()
+        const subject = `Portfolio message from ${name || 'someone'}`
+        const body = `${message}\n\n—\nFrom: ${name}${email ? ` (${email})` : ''}`
+        window.location.href =
+          `mailto:${CONTACT_EMAIL}` +
+          `?subject=${encodeURIComponent(subject)}` +
+          `&body=${encodeURIComponent(body)}`
+      }}
+    >
+      <div className="ms-form-group">
+        <label className="ms-label">Name</label>
+        <input
+          className="ms-input"
+          type="text"
+          placeholder="Your name"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          required
+        />
+      </div>
+      <div className="ms-form-group">
+        <label className="ms-label">Email</label>
+        <input
+          className="ms-input"
+          type="email"
+          placeholder="your@email.com"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+      </div>
+      <div className="ms-form-group">
+        <label className="ms-label">Message</label>
+        <textarea
+          className="ms-input ms-textarea"
+          placeholder="What's on your mind?"
+          rows={4}
+          value={message}
+          onChange={e => setMessage(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit" className="ms-btn ms-btn--primary ms-btn--full">
+        Send Message ✦
+      </button>
+    </form>
   )
 }
 
@@ -478,23 +544,7 @@ export default function ModernSite({ onRevert }: ModernSiteProps) {
             {/* 3-D tilt contact card */}
             <TiltCard />
 
-            <form className="ms-form ms-glass" onSubmit={e => e.preventDefault()}>
-              <div className="ms-form-group">
-                <label className="ms-label">Name</label>
-                <input className="ms-input" type="text" placeholder="Your name" />
-              </div>
-              <div className="ms-form-group">
-                <label className="ms-label">Email</label>
-                <input className="ms-input" type="email" placeholder="your@email.com" />
-              </div>
-              <div className="ms-form-group">
-                <label className="ms-label">Message</label>
-                <textarea className="ms-input ms-textarea" placeholder="What's on your mind?" rows={4} />
-              </div>
-              <button type="submit" className="ms-btn ms-btn--primary ms-btn--full">
-                Send Message ✦
-              </button>
-            </form>
+            <ContactForm />
           </div>
         </div>
       </section>
@@ -507,6 +557,7 @@ export default function ModernSite({ onRevert }: ModernSiteProps) {
           <div className="ms-footer-links">
             <a href="https://github.com/FaizKhanv7" target="_blank" rel="noreferrer">GitHub</a>
             <a href="https://www.linkedin.com/in/faiz-khan-6958b639a/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href="https://x.com/faizkhanv7" target="_blank" rel="noreferrer">X</a>
             <a href="mailto:writetofaiz7@gmail.com">Email</a>
           </div>
         </div>

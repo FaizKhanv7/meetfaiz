@@ -17,11 +17,11 @@ const PROJECTS = [
   },
   {
     id: 2,
-    title: 'Hustlr',
+    title: 'Muse',
     description:
-      'The startup idea I\'m currently building. If you wanna make money, check it out!',
+      'The startup idea I\'m currently building. If you vibecode, check it out!',
     tags: ['React', 'Typescript', 'Startup'],
-    link: 'https://tryhustlr.vercel.app',
+    link: 'https://usemuse.dev',
   },
   {
     id: 3,
@@ -41,8 +41,13 @@ const PROJECTS = [
   },
 ]
 
+const CONTACT_EMAIL = 'faiz@usemuse.dev'
+
 export default function OldFacebook({ onModernize }: OldFacebookProps) {
   const [stalkerOpen, setStalkerOpen] = useState(false)
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [message, setMessage] = useState('')
   return (
     <div className="fb-root">
       {/* Top bar */}
@@ -74,7 +79,7 @@ export default function OldFacebook({ onModernize }: OldFacebookProps) {
             <div className="fb-sidebar-tagline">Developer · Community Builder</div>
             <hr className="fb-divider" />
             <ul className="fb-sidebar-list">
-              <li><span className="fb-sidebar-icon">📍</span> India</li>
+              <li><span className="fb-sidebar-icon">📍</span> Georgia</li>
               <li><span className="fb-sidebar-icon">🎂</span> Age 16</li>
               <li><span className="fb-sidebar-icon">💼</span> Open to work</li>
               <li><span className="fb-sidebar-icon">🌐</span> Building communities</li>
@@ -97,7 +102,8 @@ export default function OldFacebook({ onModernize }: OldFacebookProps) {
             <ul className="fb-sidebar-list">
               <li><a href="https://github.com/FaizKhanv7" target="_blank" rel="noreferrer">GitHub</a></li>
               <li><a href="https://www.linkedin.com/in/faiz-khan-6958b639a/" target="_blank" rel="noreferrer">LinkedIn</a></li>
-              <li><a href="mailto:writetofaiz7@gmail.com">Email Me</a></li>
+              <li><a href="https://x.com/faizkhanv7" target="_blank" rel="noreferrer">X (Twitter)</a></li>
+              <li><a href="mailto:faiz@usemuse.dev">Email Me</a></li>
             </ul>
           </div>
         </aside>
@@ -193,18 +199,46 @@ export default function OldFacebook({ onModernize }: OldFacebookProps) {
               <p style={{ marginBottom: '16px' }}>
                 Want to collaborate, have a question, or just want to say hi? Drop me a message.
               </p>
-              <form className="fb-contact-form" onSubmit={e => e.preventDefault()}>
+              <form
+                className="fb-contact-form"
+                onSubmit={e => {
+                  e.preventDefault()
+                  const subject = `Portfolio message from ${name || 'someone'}`
+                  const body = `${message}\n\n—\nFrom: ${name}${email ? ` (${email})` : ''}`
+                  window.location.href =
+                    `mailto:${CONTACT_EMAIL}` +
+                    `?subject=${encodeURIComponent(subject)}` +
+                    `&body=${encodeURIComponent(body)}`
+                }}
+              >
                 <div className="fb-form-row">
                   <label>Name</label>
-                  <input type="text" placeholder="Your name" />
+                  <input
+                    type="text"
+                    placeholder="Your name"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    required
+                  />
                 </div>
                 <div className="fb-form-row">
                   <label>Email</label>
-                  <input type="email" placeholder="your@email.com" />
+                  <input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                  />
                 </div>
                 <div className="fb-form-row">
                   <label>Message</label>
-                  <textarea placeholder="What's on your mind?" rows={4} />
+                  <textarea
+                    placeholder="What's on your mind?"
+                    rows={4}
+                    value={message}
+                    onChange={e => setMessage(e.target.value)}
+                    required
+                  />
                 </div>
                 <button type="submit" className="fb-submit-btn">Send Message</button>
               </form>
@@ -245,7 +279,7 @@ export default function OldFacebook({ onModernize }: OldFacebookProps) {
       <footer className="fb-footer">
         <span>Faiz Khan · {new Date().getFullYear()} · Built with React</span>
         <span>
-          <a href="https://github.com/FaizKhanv7">GitHub</a> · <a href="https://www.linkedin.com/in/faiz-khan-6958b639a/">LinkedIn</a> · <a href="mailto:writetofaiz7@gmail.com">Email</a>
+          <a href="https://github.com/FaizKhanv7">GitHub</a> · <a href="https://www.linkedin.com/in/faiz-khan-6958b639a/">LinkedIn</a> · <a href="https://x.com/faizkhanv7" target="_blank" rel="noreferrer">X</a> · <a href="mailto:writetofaiz7@gmail.com">Email</a>
         </span>
       </footer>
 
